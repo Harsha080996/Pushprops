@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+  <h2>Sample Table</h2>
+	<button type="button" class="btn btn-primary" id="getData">Load Data</button>
+  <div class="table-responsive">
+  <table class="table" id= "data_table">
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>url</th>
+      </tr>
+  </table>
+</div>
+</div>
+</body>
+</html>
+
+<script>
+$(document).ready(function() {
+  var data= '';
+
+  if(localStorage.myJSON !== undefined){
+    var myJSON = JSON.parse(localStorage.myJSON);
+    data += '<tbody>';
+    $.each(myJSON, function(key, value){
+      data += '<tr>';
+      data += '<td>'+value.id+'</td>';
+      data += '<td>'+value.name+'</td>';
+      data += '<td>'+value.url+'</td>';
+
+      data += '</tr>';
+    });
+    data += '</tbody>';
+    $('#data_table').append(data);
+  }
+
+   data= '';  // empty employee_data
+
+  $('#getData').click(function() {
+    $.getJSON("https://aimtell.com/files/sites.json", function(data){
+        $("#yourtableid tbody").remove();    // Empty table before filling it with new data
+
+        localStorage.setItem(myJSON, JSON.stringify(data)); // Save new data in localStorage
+        $.each(data.sites, function(key, value){
+          data += '<tr>';
+          data += '<td>'+value.id+'</td>';
+          data += '<td>'+value.name+'</td>';
+	  data += '<td>'+value.url+'</td>';
+
+	data += '</tr>';
+        });
+        $('#data_table').append(data);
+    });
+  })
+});
+</script>
